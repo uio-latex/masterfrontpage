@@ -1,0 +1,658 @@
+% Package for creating front pages for master's theses.
+% Implemented by Martin Helsø (martibhe@math.uio.no).
+% Version 2018-03-13.
+
+
+\NeedsTeXFormat{LaTeX2e}[1994/12/01]
+\ProvidesClass{masterfrontpage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Language:
+\DeclareOption{american}
+{
+    \def \MFP@lang   {eng}
+    \def \MFP@variety {US}
+}
+
+\DeclareOption{english}
+{
+    \def \MFP@lang   {eng}
+    \def \MFP@variety {UK}
+}
+
+\DeclareOption{UKenglish}
+{
+    \def \MFP@lang   {eng}
+    \def \MFP@variety {UK}
+}
+
+\DeclareOption{USenglish}
+{
+    \def \MFP@lang   {eng}
+    \def \MFP@variety {US}
+}
+
+\DeclareOption{norsk}
+{
+    \def \MFP@lang    {bm}
+    \def \MFP@variety {bm}
+}
+
+\DeclareOption{nynorsk}
+{
+    \def \MFP@lang    {nn}
+    \def \MFP@variety {nn}
+}
+
+
+%% Purpose of document:
+\DeclareOption{print}
+{
+    \def \MFP@indent {11 mm}
+    \def \MFP@bump   { 2 mm}
+}
+
+\DeclareOption{web}
+{
+    \def \MFP@indent { 0 mm}
+    \def \MFP@bump   { 0 mm}
+}
+
+
+%% Title length:
+\DeclareOption{OrdinaryTitle}
+{
+    \def \MFP@title {Ordinary}
+    \def \MFP@titlesize {\fontsize{32}{35pt}}
+}
+
+\DeclareOption{LongTitle}
+{ 
+    \def \MFP@title {Long}
+    \def \MFP@titlesize {\fontsize{24}{27pt}}
+}
+
+\DeclareOption{ExtraLongTitle}
+{
+    \def \MFP@title {ExtraLong}
+    \def \MFP@titlesize {\fontsize{17}{20pt}}
+}
+
+
+%% Number of credits:
+\DeclareOption{30}{ \def \MFP@credits {30} }
+\DeclareOption{60}{ \def \MFP@credits {60} }
+
+
+%% Study programme:
+\DeclareOption{MAT}
+{
+    \def \MFP@program {\csname MFP@mat@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@MAT@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@MAT@\MFP@variety\endcsname}
+}
+
+\DeclareOption{MFA}
+{
+    \def \MFP@program {\csname MFP@mat@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@MFA@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@MFA@\MFP@variety\endcsname}
+}
+
+\DeclareOption{MEK}
+{
+    \def \MFP@program {\csname MFP@mek@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@MEK@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@MEK@\MFP@variety\endcsname}
+}
+
+\DeclareOption{FFR}
+{
+    \def \MFP@program {\csname MFP@smsr@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@FFR@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@FFR@\MFP@variety\endcsname}
+}
+
+\DeclareOption{STK}
+{
+    \def \MFP@program {\csname MFP@smsr@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@STK@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@STK@\MFP@variety\endcsname}
+}
+
+\DeclareOption{DS}
+{
+    \def \MFP@program {\csname MFP@ds@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@DS@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@DS@\MFP@variety\endcsname}
+}
+
+\DeclareOption{CSMEK}
+{
+    \def \MFP@program {\csname MFP@cs@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@CSMEK@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@CSMEK@\MFP@variety\endcsname}
+}
+
+\DeclareOption{AMRA}
+{
+    \def \MFP@program {\csname MFP@cs@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@AMRA@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@AMRA@\MFP@variety\endcsname}
+}
+
+\DeclareOption{LEKMAT}
+{
+    \def \MFP@program {\csname MFP@lek@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@LEKMAT@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@LEKMAT@\MFP@variety\endcsname}
+    \def \MFP@credits {30}
+}
+
+\DeclareOption{LEKMEK}
+{
+    \def \MFP@program {\csname MFP@lek@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@LEKMEK@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@LEKMEK@\MFP@variety\endcsname}
+    \def \MFP@credits {30}
+}
+
+\DeclareOption{OLDFFR}
+{
+    \def \MFP@program {\csname MFP@mod@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@OLDFFR@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@OLDFFR@\MFP@variety\endcsname}
+}
+
+\DeclareOption{SDATA}
+{
+    \def \MFP@program {\csname MFP@mod@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@SDATA@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@SDATA@\MFP@variety\endcsname}
+}
+
+\DeclareOption{CS}
+{
+    \def \MFP@program {\csname MFP@anmat@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@CS@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@CS@\MFP@variety\endcsname}
+}
+
+\DeclareOption{OLDMEK}
+{
+    \def \MFP@program {\csname MFP@anmat@\MFP@lang\endcsname}
+    \def \MFP@option  {\csname MFP@OLDMEK@\MFP@lang\endcsname}
+    \def \MFP@width   {\csname MFP@width@OLDMEK@\MFP@variety\endcsname}
+}
+
+%% Standard options:
+\ExecuteOptions{english}
+\ExecuteOptions{print}
+\ExecuteOptions{OrdinaryTitle}
+\ExecuteOptions{60}
+\ProcessOptions*
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%% PACKAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{fix-cm}
+\RequirePackage{calc}
+\RequirePackage{eso-pic}
+\RequirePackage{picture}
+\RequirePackage{xifthen}
+\RequirePackage{tikz}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN COMMAND %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\@ifclassloaded{memoir}
+{
+    \newcommand{\masterfrontpage}
+    {
+        \def \and {\leavevmode\unskip, }
+        \begin{titlingpage}
+            \AddToShipoutPictureBG*{\MFP@print@background}
+            \AddToShipoutPictureFG*{\MFP@print@title}
+            \null
+            \clearpage
+            \MFP@print@colophon
+        \end{titlingpage}
+    }
+}
+{
+    \newcommand{\masterfrontpage}
+    {
+        \def \and {\leavevmode\unskip, }
+        \begin{titlepage}
+            \AddToShipoutPictureBG*{\MFP@print@background}
+            \AddToShipoutPictureFG*{\MFP@print@title}
+            \null
+            \clearpage
+            \MFP@print@colophon
+        \end{titlepage}
+    }
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Additional commands:
+\newcommand{\subtitle}[1]{ \def \MFP@subtitle{#1} }
+\subtitle{}
+
+
+%% Background:
+\newcommand{\MFP@print@background}
+{
+    \put(-3, -3)
+    {
+        \includegraphics
+        {masterfrontpage-images/masterfrontpage-background.pdf}
+    }
+
+    \begin{tikzpicture}[remember picture,
+                        overlay,
+                        shift = {(current page.north west)}]
+        \fill[uioblack]
+        (0, 0) rectangle (\paperwidth, -3.5cm);
+        \fill[uiowhite, opacity = 0.8]
+        (0, -3.5 cm) rectangle (\paperwidth, -10 cm);
+    \end{tikzpicture}
+
+    \put(\MFPapollonx, 25 mm + \MFP@bump)
+    {
+        \includegraphics[width = 27mm]
+        {masterfrontpage-images/masterfrontpage-apollon.pdf}
+    }
+
+    \put(\MFPlogox, \MFPlogoy)
+    {
+        \includegraphics[scale = 0.6]
+        {masterfrontpage-images/masterfrontpage-logo-\MFP@lang.pdf}
+    }
+}
+
+
+%% Text:
+\newcommand{\MFP@print@title}
+{
+    \put(\MFPtextx, \MFPtexty)
+    {
+        \vbox to 65 mm
+        {
+            \hsize = \MFPtextlength
+            \raggedright
+
+            % Redefinition of standard \LaTeX command because
+            % the font package 'bera' mangles it!
+            \ifthenelse{ \isundefined{\fveLaTeX} }{}
+            {
+                \DeclareRobustCommand{\mn@LaTeX}
+                {
+                    L\kern-.36em
+                    {
+                        \sbox\z@ T
+                        \vbox to\ht\z@
+                        {
+                            \hbox
+                            {
+                                \check@mathfonts
+                                \fontsize\sf@size\z@
+                                \math@fontsfalse\selectfont
+                                A
+                            }
+                            \vss
+                         }
+                    }
+                    \kern-.15em
+                    \TeX
+                }
+                \let \LaTeX = \mn@LaTeX
+            }
+
+            \vfill
+
+            \fontfamily{phv}
+            \MFP@titlesize
+            \selectfont
+            \bfseries
+            \@title
+
+            \newlength{\MFP@titlelength}
+            \settowidth{\MFP@titlelength}{\@title}
+
+            \ifthenelse
+            { 
+                \equal{\MFP@title}{Ordinary}
+                \AND 
+                \lengthtest{\MFP@titlelength < \hsize}
+            }
+            {
+                \def \MFP@skip{1.5 em}
+            }
+            {
+                \def \MFP@skip{1 em}
+            }
+
+            \vskip 0.5ex
+
+            \normalfont
+            \fontfamily{phv}
+            \fontsize{17}{20pt}
+            \selectfont
+            \MFP@subtitle
+
+            \vskip \MFP@skip
+            {
+                \bfseries
+                \@author
+            }
+            \vskip0.1ex
+            \MFP@kind
+            \vfill
+        }
+    }
+}
+
+
+%% Determine the term (as in "Autumn 2015"):
+\newcounter{MFP@cur@year}
+\newcounter{MFP@cur@month}
+\setcounter{MFP@cur@year} { \the\year  }
+\setcounter{MFP@cur@month}{ \the\month }
+
+\ifthenelse{ \theMFP@cur@month < 7 }
+{
+    \newcommand{\MFP@term@eng}{Spring}
+    \newcommand{\MFP@term@bm} {v\aa ren}
+    \newcommand{\MFP@term@nn} {v\aa ren}
+}
+{
+    \newcommand{\MFP@term@eng}{Autumn}
+    \newcommand{\MFP@term@bm} {h\o sten}
+    \newcommand{\MFP@term@nn} {hausten}
+}
+
+\newcommand{\MFP@term}{ \csname MFP@term@\MFP@lang\endcsname }
+\newcommand{\MFP@year}{ \arabic{MFP@cur@year}                }
+
+
+%% Specify "Master's Thesis" in the correct language:
+\newcommand{\MFP@thesisname@eng}{Master's Thesis}
+\newcommand{\MFP@thesisname@bm} {Masteroppgave}
+\newcommand{\MFP@thesisname@nn} {Masteroppg\aa ve}
+
+
+%% Define a suitable document kind, like "Master's Thesis, Spring 2015":
+\newcommand{\MFP@kind}
+{
+    \csname MFP@thesisname@\MFP@lang\endcsname,~\MFP@term~\MFP@year
+}
+
+
+%% Lengths:
+\newlength{\MFPlogox}
+\newlength{\MFPlogoy}
+\newlength{\MFPtextx}
+\newlength{\MFPtexty}
+\newlength{\MFPtextlength}
+\newlength{\MFPapollonx}
+
+\setlength{\MFPlogox}{18.9 mm + \MFP@indent}
+\setlength{\MFPlogoy}{\paperheight - 29.6 mm}
+\setlength{\MFPtextx}{41.9 mm + \MFP@indent}
+\setlength{\MFPtexty}{\paperheight - 100 mm}
+\setlength{\MFPtextlength}{\paperwidth - \MFPtextx - \MFPlogox + \MFP@indent}
+\setlength{\MFPapollonx}{25 mm + \MFP@indent}
+
+
+%% Colours:
+\definecolor{uiored}  {cmyk}{0, 1, 1, 0}
+\definecolor{uioblack}{cmyk}{0, 0, 0, 1}
+\definecolor{uiowhite}{cmyk}{0, 0, 0, 0}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% COLOPHON %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Main command:
+\newcommand{\MFP@print@colophon}
+{
+    \thispagestyle{empty}
+    \ifthenelse{\isundefined{\MFP@program}}
+    {{
+        \color{uiored}
+        \noindent
+        The study programme is unspecified. Please consult the documentation for the package \texttt{masterfrontpage} in order to correctly print the colophon.
+    }}
+    {
+        \vspace*{\stretch{1}}
+        \begin{center}
+            \makebox[0pt]
+            {
+                \begin{minipage}{\MFP@width}
+                    \fontfamily{lmr}
+                    \fontshape{n}
+                    \fontsize{10}{12pt}
+                    \selectfont
+                    \ifthenelse
+                    {
+                        \equal{\MFP@program}
+                            {\csname MFP@lek@\MFP@variety\endcsname}
+                    }
+                    {
+                        \csname MFP@lektor@\MFP@variety\endcsname
+                    }
+                    {
+                        \csname MFP@master@\MFP@variety\endcsname
+                    }
+                    \vskip4em
+                    \csname MFP@Lie@\MFP@lang\endcsname
+                \end{minipage}
+            }
+        \end{center}
+        \vspace*{\stretch{3}}
+    }
+    \null
+    \newpage
+}
+
+
+%% Colophon text:
+\newcommand{\MFP@master@bm}
+{
+    Denne masteroppgaven er levert inn under masterprogrammet \textit{\MFP@program}, studieretning \textit{\MFP@option}, ved Matematisk institutt, Universitetet i Oslo. Oppgaven er normert til \MFP@credits\ studiepoeng.
+}
+
+\newcommand{\MFP@master@nn}
+{
+    Denne masteroppg{\aa}va er levert inn under masterprogrammet \textit{\MFP@program}, studieretning \textit{\MFP@option}, ved Matematisk institutt, Universitetet i Oslo. Oppg{\aa}va er normert til \MFP@credits\ studiepoeng.
+}
+
+\newcommand{\MFP@master@UK}
+{
+    This master's thesis is submitted under the master's programme \textit{\MFP@program}, with programme option \textit{\MFP@option}, at the Department of Mathematics, University of Oslo. The scope of the thesis is \MFP@credits\ credits. 
+}
+
+\newcommand{\MFP@master@US}
+{
+    This master's thesis is submitted under the master's program \textit{\MFP@program}, with program option \textit{\MFP@option}, at the Department of Mathematics, University of Oslo. The scope of the thesis is \MFP@credits\ credits.
+}
+
+\newcommand{\MFP@lektor@bm}
+{
+    Denne masteroppgaven er levert inn som en del av programspesialiseringen \textit{\MFP@option} under \textit{\MFP@program} ved Universitetet i Oslo. Oppgaven er normert til \MFP@credits\ studiepoeng.
+}
+
+\newcommand{\MFP@lektor@nn}
+{
+    Denne masteroppg{\aa}va er levert inn som ein del av programspesialiseringa \textit{\MFP@option} under \textit{\MFP@program} ved Universitetet i Oslo. Oppg{\aa}va er normert til \MFP@credits\ studiepoeng.
+}
+
+\newcommand{\MFP@lektor@UK}
+{
+    This master's thesis is submitted as part of the programme specialisation  \textit{\MFP@option} under \textit{\MFP@program} at the University of Oslo. The scope of the thesis is \MFP@credits\ credits.
+}
+
+\newcommand{\MFP@lektor@US}
+{
+    This master's thesis is submitted as part of the program specialization  \textit{\MFP@option} under \textit{\MFP@program} at the University of Oslo. The scope of the thesis is \MFP@credits\ credits.
+}
+
+
+%% Explanation of front page:
+\newcommand{\MFP@Lie@eng}
+{
+    The front page depicts a section of the root system of the exceptional Lie~group~\( E_8 \), projected into the plane. Lie groups were invented by the Norwegian mathematician Sophus Lie (1842\kern0.7pt--1899) to express symmetries in differential equations and today they play a central role in various parts of mathematics.
+}
+
+\newcommand{\MFP@Lie@bm}
+{
+    Forsiden viser et utsnitt av rotsystemet til den eksepsjonelle liegruppen~\( E_8 \), projisert ned i planet. Liegrupper ble oppfunnet av den norske matematikeren Sophus Lie (1842\kern0.7pt--1899) for \aa\ uttrykke symmetriene til differensiallikninger og spiller i dag en sentral rolle i flere deler av matematikken.
+}
+
+\newcommand{\MFP@Lie@nn}
+{
+    Framsida viser eit utsnitt av rotsystemet til den eksepsjonelle lie\-gruppa~\( E_8 \), projisert ned i planet. Liegrupper vart funne opp av den norske matematikaren Sophus Lie (1842\kern0.7pt--1899) for \aa\ uttrykkje symmetriane til differensiallikningar og spelar i dag ei sentral rolle i fleire delar av matematikken.
+}
+
+
+%% Study programme:
+\newcommand{\MFP@mat@eng}{Mathematics}
+\newcommand{\MFP@mat@bm}{Matematikk}
+\newcommand{\MFP@mat@nn}{Matematikk}
+\newcommand{\MFP@mek@eng}{Mechanics}
+\newcommand{\MFP@mek@bm}{Mekanikk}
+\newcommand{\MFP@mek@nn}{Mekanikk}
+\newcommand{\MFP@smsr@eng}{Stochastic Modelling, Statistics and Risk Analysis}
+\newcommand{\MFP@smsr@bm}{Stokastisk modellering, statistikk og risikoanalyse}
+\newcommand{\MFP@smsr@nn}{Stokastisk modellering, statistikk og risikoanalyse}
+\newcommand{\MFP@ds@eng}{Data Science}
+\newcommand{\MFP@ds@bm}{Data Science}
+\newcommand{\MFP@ds@nn}{Data Science}
+\newcommand{\MFP@cs@eng}{Computational Science}
+\newcommand{\MFP@cs@bm}{Computational Science}
+\newcommand{\MFP@cs@nn}{Computational Science}
+\newcommand{\MFP@lek@eng}{Lektorprogrammet}
+\newcommand{\MFP@lek@bm}{Lektorprogrammet}
+\newcommand{\MFP@lek@nn}{Lektorprogrammet}
+\newcommand{\MFP@mod@eng}{Modelling and Data Analysis}
+\newcommand{\MFP@mod@bm}{Modellering og dataanalyse}
+\newcommand{\MFP@mod@nn}{Modellering og dataanalyse}
+\newcommand{\MFP@anmat@eng}{Computational Science and Engineering}
+\newcommand{\MFP@anmat@bm}{Anvendt matematikk og mekanikk}
+\newcommand{\MFP@anmat@nn}{Bruksretta matematikk og mekanikk}
+
+
+%% Programme option:
+\newcommand{\MFP@MAT@eng}{Mathematics}
+\newcommand{\MFP@MAT@bm}{Matematikk}
+\newcommand{\MFP@MAT@nn}{Matematikk}
+\newcommand{\MFP@MFA@eng}{Mathematics for applications}
+\newcommand{\MFP@MFA@bm}{Matematikk for anvendelser}
+\newcommand{\MFP@MFA@nn}{Matematikk for bruk}
+\newcommand{\MFP@MEK@eng}{Mechanics}
+\newcommand{\MFP@MEK@bm}{Mekanikk}
+\newcommand{\MFP@MEK@nn}{Mekanikk}
+\newcommand{\MFP@FFR@eng}{Finance, Insurance and Risk}
+\newcommand{\MFP@FFR@bm}{Finans, forsikring og risiko}
+\newcommand{\MFP@FFR@nn}{Finans, forsikring og risiko}
+\newcommand{\MFP@STK@eng}{Statistics}
+\newcommand{\MFP@STK@bm}{Statistikk}
+\newcommand{\MFP@STK@nn}{Statistikk}
+\newcommand{\MFP@DS@eng}{Data Science}
+\newcommand{\MFP@DS@bm}{Data Science}
+\newcommand{\MFP@DS@nn}{Data Science}
+\newcommand{\MFP@CSMEK@eng}{Mechanics}
+\newcommand{\MFP@CSMEK@bm}{Mekanikk}
+\newcommand{\MFP@CSMEK@nn}{Mekanikk}
+\newcommand{\MFP@AMRA@eng}{Applied Mathematics and Risk Analysis}
+\newcommand{\MFP@AMRA@bm}{Anvendt matematikk og risikoanalyse}
+\newcommand{\MFP@AMRA@nn}{Bruksretta matematikk og risikoanalyse}
+\newcommand{\MFP@LEKMAT@eng}{Mathematics}
+\newcommand{\MFP@LEKMAT@bm}{Matematikk}
+\newcommand{\MFP@LEKMAT@nn}{Matematikk}
+\newcommand{\MFP@LEKMEK@eng}{Mechanics}
+\newcommand{\MFP@LEKMEK@bm}{Mekanikk}
+\newcommand{\MFP@LEKMEK@nn}{Mekanikk}
+\newcommand{\MFP@OLDFFR@eng}{Finance, Insurance and Risk}
+\newcommand{\MFP@OLDFFR@bm}{Finans, forsikring og risiko}
+\newcommand{\MFP@OLDFFR@nn}{Finans, forsikring og risiko}
+\newcommand{\MFP@SDATA@eng}{Statistics and Data Analysis}
+\newcommand{\MFP@SDATA@bm}{Statistikk og dataanalyse}
+\newcommand{\MFP@SDATA@nn}{Statistikk og dataanalyse}
+\newcommand{\MFP@CS@eng}{Computational Science}
+\newcommand{\MFP@CS@bm}{Computational Science}
+\newcommand{\MFP@CS@nn}{Computational Science}
+\newcommand{\MFP@OLDMEK@eng}{Mechanics}
+\newcommand{\MFP@OLDMEK@bm}{Mekanikk}
+\newcommand{\MFP@OLDMEK@nn}{Mekanikk}
+
+
+%% Line width:
+\newcommand{\MFP@width@MAT@bm}{11.7 cm}
+\newcommand{\MFP@width@MAT@nn}{13.6 cm}
+\newcommand{\MFP@width@MAT@UK}{11.8 cm}
+\newcommand{\MFP@width@MAT@US}{11.4 cm}
+\newcommand{\MFP@width@MFA@bm}{13.6 cm}
+\newcommand{\MFP@width@MFA@nn}{11.9 cm}
+\newcommand{\MFP@width@MFA@UK}{12.8 cm}
+\newcommand{\MFP@width@MFA@US}{12.6 cm}
+\newcommand{\MFP@width@MEK@bm}{13.1 cm}
+\newcommand{\MFP@width@MEK@nn}{12.9 cm}
+\newcommand{\MFP@width@MEK@UK}{12.6 cm}
+\newcommand{\MFP@width@MEK@US}{12.6 cm}
+\newcommand{\MFP@width@FFR@bm}{11.7 cm}
+\newcommand{\MFP@width@FFR@nn}{12.8 cm}
+\newcommand{\MFP@width@FFR@UK}{11.3 cm}
+\newcommand{\MFP@width@FFR@US}{12.6 cm}
+\newcommand{\MFP@width@STK@bm}{13.7 cm}
+\newcommand{\MFP@width@STK@nn}{13.7 cm}
+\newcommand{\MFP@width@STK@UK}{13 cm}
+\newcommand{\MFP@width@STK@US}{12.6 cm}
+\newcommand{\MFP@width@DS@bm}{11.7 cm}
+\newcommand{\MFP@width@DS@nn}{11.9 cm}
+\newcommand{\MFP@width@DS@UK}{11.8 cm}
+\newcommand{\MFP@width@DS@US}{11.3 cm}
+\newcommand{\MFP@width@CSMEK@bm}{11.7 cm}
+\newcommand{\MFP@width@CSMEK@nn}{12.1 cm}
+\newcommand{\MFP@width@CSMEK@UK}{12.6 cm}
+\newcommand{\MFP@width@CSMEK@US}{11.6 cm}
+\newcommand{\MFP@width@AMRA@bm}{11.7 cm}
+\newcommand{\MFP@width@AMRA@nn}{12 cm}
+\newcommand{\MFP@width@AMRA@UK}{12 cm}
+\newcommand{\MFP@width@AMRA@US}{11.7 cm}
+\newcommand{\MFP@width@LEKMAT@bm}{11.7 cm}
+\newcommand{\MFP@width@LEKMAT@nn}{11.9 cm}
+\newcommand{\MFP@width@LEKMAT@UK}{11.7 cm}
+\newcommand{\MFP@width@LEKMAT@US}{11.4 cm}
+\newcommand{\MFP@width@LEKMEK@bm}{11.7 cm}
+\newcommand{\MFP@width@LEKMEK@nn}{11.9 cm}
+\newcommand{\MFP@width@LEKMEK@UK}{11.7 cm}
+\newcommand{\MFP@width@LEKMEK@US}{11.4 cm}
+\newcommand{\MFP@width@OLDFFR@bm}{11.7 cm}
+\newcommand{\MFP@width@OLDFFR@nn}{12.1 cm}
+\newcommand{\MFP@width@OLDFFR@UK}{11.6 cm}
+\newcommand{\MFP@width@OLDFFR@US}{11.6 cm}
+\newcommand{\MFP@width@SDATA@bm}{12 cm}
+\newcommand{\MFP@width@SDATA@nn}{12 cm}
+\newcommand{\MFP@width@SDATA@UK}{11.6 cm}
+\newcommand{\MFP@width@SDATA@US}{11.6 cm}
+\newcommand{\MFP@width@CS@bm}{13.5 cm}
+\newcommand{\MFP@width@CS@nn}{13.6 cm}
+\newcommand{\MFP@width@CS@UK}{12.6 cm}
+\newcommand{\MFP@width@CS@US}{11.6 cm}
+\newcommand{\MFP@width@OLDMEK@bm}{13.1 cm}
+\newcommand{\MFP@width@OLDMEK@nn}{13.2 cm}
+\newcommand{\MFP@width@OLDMEK@UK}{12.6 cm}
+\newcommand{\MFP@width@OLDMEK@US}{13 cm}
+
+
+\endinput
