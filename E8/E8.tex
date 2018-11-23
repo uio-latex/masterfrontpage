@@ -1,1 +1,40 @@
-
+\documentclass{article}
+\usepackage[paperwidth  = 402mm,
+            paperheight = 402mm,
+            top         = 29mm,
+            left        = 57 mm]{geometry}
+\usepackage{tikz}    
+\pagenumbering{gobble}
+\definecolor{linecolor}{cmyk}{0, 0, 0, 0.6}
+\begin{document}
+    \begin{tikzpicture}[remember picture, overlay, shift = {(13.9, -16.8)}]
+    \foreach \r in {6, 8, 14, 20}
+        \foreach \theta in {0, 12,...,359}
+        {
+            \pgfmathsetmacro{\first}{(\theta + 12)}
+            \pgfmathsetmacro{\second}{(\theta + 24)}
+            \foreach \phi in {\first, \second,..., 359}
+            {
+                \pgfmathparse{Mod(\phi - \theta, 180) == 0 ? 1 : 0}
+                \ifnum\pgfmathresult = 0
+                    \draw[very thin, linecolor] 
+                         (\theta : \r) -- (\phi : \r);
+                \fi
+            }
+        }
+    \foreach \r in {10, 12, 16, 18}
+        \foreach \theta in {6, 18,...,365}
+        {
+            \pgfmathsetmacro{\first}{(\theta + 12)}
+            \pgfmathsetmacro{\second}{(\theta + 24)}
+            \foreach \phi in {\first, \second,...,365}
+                {
+                    \pgfmathparse{Mod(\phi - \theta, 180) == 0 ? 1 : 0}
+                    \ifnum\pgfmathresult = 0
+                        \draw[very thin, linecolor] 
+                             (\theta : \r) -- (\phi : \r);
+                    \fi
+                  }
+        }
+    \end{tikzpicture}
+\end{document}
