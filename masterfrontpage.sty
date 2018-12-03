@@ -196,7 +196,7 @@
 \ProcessOptions*
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%% PACKAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PACKAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \RequirePackage[T1]{fontenc}
@@ -352,7 +352,11 @@
             \vskip \MFP@skip
             {
                 \bfseries
-                \@author
+                \ifdefined\authors
+                    \authors
+                \else
+                    \@author
+                \fi
             }
             \vskip0.1ex
             \MFP@kind
